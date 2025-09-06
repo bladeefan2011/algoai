@@ -1,0 +1,22 @@
+1. Käytän Pythonia projektiin. Aion selvittää työn edetessä, että mitä ominaisuuksia ja kirjastoja tulen käyttämään työssäni. Kieliosaamiseni on suhteellisen pieni, eli voisin arvioida pääosin vain pythonia.
+
+2. Toteutan työssäni pakkausalgoritmeja, joiden tehokkuutta vertailen laittamalla ne vastakkain tekstinpakkauksessa. Tutkin algoritmien tehokkuutta eri mittaisten ja sisällöllisten tekstien pakkauksessa. Valitsin algoritmeiksi Huffman-koodauksen ja Lempel-Ziv:in kehittämää LZ77-algortimin. Molemmat näistä ovat “lossless compression”, eli pakkauksessa ei häviä yhtään dataa. Huffman-koodaus hyödyntää binääripuuta, kun taas LZ77 käyttää liukuvaa ikkunaa.
+
+3. Ratkaisen työssäni kahta eri ongelmaa. Käytännön ongelmana on kahden algoritmin vertailu. Haluan selvittää, kumpi algoritmeista toimii tehokkaammin tietynlaisen datan kanssa. Teoreettisempi ongelma jonka ratkaisen on se, millainen filosofia tiedonpakkaukseen on parempi. Onko tehokkaampaa katsoa yksittäisiä symboleja vai laajempia kuvioita?
+
+4. Kuten mainitsin, ohjelma saa syötteekseen eri mittaisia ja sisällöltään eroavia tekstitiedostoja, joita se käsittelee ja pakkaa. Tekstitiedostoina aion hyödyntää toistuvia sarjoja, lyhyitä virkkeitä ja pidempiä, haastavampia tekstejä.
+
+5. Hyvin optimoitu LZ77-algoritmi toimii ajassa O(n) ja vie tilaa O(w), jossa w on liikkuvan ikkunan koko. Huffman-koodaus toimii puolestaan ajassa O(n+m log m), jossa m on uniikien symbolien määrä. Sen tila on o(m).
+
+
+6. Lähteet (päivittyvät varmasti työn edetessä):
+https://en.wikipedia.org/wiki/Data_compression
+https://www.geeksforgeeks.org/electronics-engineering/what-are-data-compression-techniques/
+https://algocademy.com/blog/understanding-data-compression-algorithms-a-comprehensive-guide/
+https://cs.stanford.edu/people/eroberts/courses/soco/projects/data-compression/lossless/lz77/concept.htm
+
+
+Koko aiheen ydin on kahden pakkausalgoritmin vertailu. Vertaan Huffman-koodausta ja LZ77-algoritmia, ja etsin niiden vahvuudet ja heikkoudet. Pyrin mittaamaan niiden ominaisuuksia erilaisilla syötteillä. Pohdin pakkausalgoritmien tehokkuutta ja suurin osa ajasta kuluu algoritmien optimointiin ja suunnitteluun.
+
+Dokumentaatio tehdään suomeksi. Koodaan kuitenkin englanniksi ja commit-viestit ovat myös englanniksi. Olen suorittamassa TKT-kandia.
+
