@@ -1,7 +1,7 @@
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from lz78.codec import compress_file, decompress_file
+from algoai.lz78.codec import compress_file, decompress_file
 
 def test(folder="test_files"):  #tests the entire folder, be careful
     for file in os.listdir(folder):

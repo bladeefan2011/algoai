@@ -1,6 +1,7 @@
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))) #gets the correct path
-from huffman.codec import compress_file, decompress_file
+from algoai.huffman.codec import compress_file, decompress_file
+
 
 
 def test(input): #tests the flle by compressing it and decompressing it and then comparing the original file and the decompressed file
@@ -16,8 +17,12 @@ def test(input): #tests the flle by compressing it and decompressing it and then
     print(original == restored)
     
 if __name__ == "__main__":
-    test_folder = "test_files"
+    # Get absolute path to the test_files folder, relative to this script
+    test_folder = os.path.join(os.path.dirname(__file__), "..", "test_files")
+    test_folder = os.path.abspath(test_folder)
+
     files = [file for file in os.listdir(test_folder) if file.endswith(".txt")]
     for filename in files:
         test(os.path.join(test_folder, filename))
+
 
