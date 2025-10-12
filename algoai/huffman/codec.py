@@ -18,7 +18,6 @@ class Node:
 		else:
 			return f"Node({self.freq})"
 	
-
 def create_dictionary(string):
 	# dic = {}                    Alternative implementation kept in case I run into problems
 	# for i in string:
@@ -57,7 +56,6 @@ def encoding(node, path="", store_codes=None): #generating the codes for the alg
 		encoding(node.right, path + "1", store_codes)
 	return store_codes
 
-
 def decoding(root, encoded):
 	decoded = []
 	cur = root
@@ -87,50 +85,59 @@ class Huffman:
 
 		
 def compress(string, codes):
-    return "".join(codes[char] for char in string)
+	return "".join(codes[char] for char in string)
 
 def decompress(bits, codes):
-    reversed = {v: k for k, v in codes.items()}
-    decoded = []
-    current_code = ""
+	reversed = {v: k for k, v in codes.items()}
+	decoded = []
+	current_code = ""
 
-    for bit in bits:
-        current_code += bit
-        if current_code in reversed:
-            decoded.append(reversed[current_code])
-            current_code = ""
-    return "".join(decoded)
-
-
+	for bit in bits:
+		current_code += bit
+		if current_code in reversed:
+			decoded.append(reversed[current_code])
+			current_code = ""
+	return "".join(decoded)
 
 def compress_file(input, output):
-    with open(input, "r", encoding="utf-8") as f:
-        text = f.read()
-    dictionary = create_dictionary(text)
-    que = create_que(dictionary)
-    tree = create_tree(que)
-    codes = encoding(tree)
-    bits = compress(text, codes)
-    save_compressed(bits, codes, output)
-
+	with open(input, "r", encoding="utf-8") as f:
+		text = f.read()
+	dictionary = create_dictionary(text)
+	que = create_que(dictionary)
+	tree = create_tree(que)
+	codes = encoding(tree)
+	bits = compress(text, codes)
+	save_compressed(bits, codes, output)
 
 def decompress_file(input, output):
-    bits, codes = load_compressed(input)
-    text = decompress(bits, codes)
-    with open(output, "w", encoding="utf-8") as f:
-        f.write(text)
+	bits, codes = load_compressed(input)
+	text = decompress(bits, codes)
+	with open(output, "w", encoding="utf-8") as f:
+		f.write(text)
 
+def save_compressed(bits, codes, file):
+	bytear = bytearray()
+	for i in range(0, len(bits), 8):
+		byte = bits[i:i+8]
+		bytear.append(int(byte.ljust(8, "0"), 2)) 
 
-def save_compressed(bits, codes, file): #saves the compressed file
-	data = {
-		"encoded": bits,
-		"codes": codes 
-	}
-	with open(file, "w", encoding="utf-8") as f:
-		json.dump(data, f)
+	metadata = {
+		"codes": codes,
+		"bit_length": len(bits)}
 
+	with open(file, "wb") as f:
+		metadata_bytes = json.dumps(metadata, separators=(",", ":")).encode("utf-8")
+		f.write(len(metadata_bytes).to_bytes(4, "big"))
+		f.write(metadata_bytes)
+		f.write(bytear)
 
-def load_compressed(file): #loads the compressed file
-	with open(file, "r", encoding="utf-8") as f:
-		data = json.load(f)
-	return data["encoded"], data["codes"]
+def load_compressed(file):
+	with open(file, "rb") as f:
+		meta_len = int.from_bytes(f.read(4), "big")
+		metadata = json.loads(f.read(meta_len).decode("utf-8"))
+		compressed = f.read()
+
+	bit_len = len(compressed)*8
+	bits = bin(int.from_bytes(compressed, "big"))[2:].zfill(bit_len)
+	bits = bits[:metadata["bit_length"]]
+	return bits, metadata["codes"]
