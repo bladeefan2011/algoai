@@ -18,14 +18,7 @@ class Node:
 		else:
 			return f"Node({self.freq})"
 	
-def create_dictionary(string):
-	# dic = {}                    Alternative implementation kept in case I run into problems
-	# for i in string:
-	#     if i in dic:
-	#         dic[i] += 1
-	#     else:
-	#         dic[i] = 1
-	# return dic
+def create_dictionary(string): #creates the dictionary with the frequency of each letter in the string
 	return Counter(string)
 
 def create_que(dic): #creates the queue which is then used to create the tree itself in the following function. using heaps is effective
@@ -50,24 +43,24 @@ def encoding(node, path="", store_codes=None): #generating the codes for the alg
 	if store_codes==None:
 		store_codes={}
 	if node.val is not None:
-		store_codes[node.val]=path
+		store_codes[node.val]=path or "0" #if the string is only a single character
 	else:
 		encoding(node.left, path + "0", store_codes) #generates the codes, adds 0 for each left node and 1 for each right node
 		encoding(node.right, path + "1", store_codes)
 	return store_codes
 
-def decoding(root, encoded):
+def decoding(root, encoded): #decodes the string from the tree
 	decoded = []
 	cur = root
 	for bit in encoded:
-		cur = cur.left if bit == "0" else cur.right
+		cur = cur.left if bit == "0" else cur.right #traverses the tree
 		if cur.val is not None:
 			decoded.append(cur.val)
 			cur = root
 	return "".join(decoded)
 
 class Huffman:
-	def __init__(self, string):
+	def __init__(self, string): #I assume this is clear
 		self.string=string
 		self.dictionary = create_dictionary(string)
 		self.que = create_que(self.dictionary)
@@ -77,18 +70,13 @@ class Huffman:
 	def root(self):
 			return self.tree
 
-	def compress(self):
-		return "".join(self.codes[char] for char in self.string)
-
-	def decompress(self, bits):
-		return decompress(bits, self.codes)
-
-		
-def compress(string, codes):
+def compress(string, codes): #encodes the string using generated codes
 	return "".join(codes[char] for char in string)
 
-def decompress(bits, codes):
-	reversed = {v: k for k, v in codes.items()}
+def decompress(bits, codes): #decodes the string from the tree
+	reversed = {}
+	for char, code in codes.items():
+		reversed[code] = char #reverses the codes dictionary to make lookup easier
 	decoded = []
 	current_code = ""
 
@@ -99,7 +87,7 @@ def decompress(bits, codes):
 			current_code = ""
 	return "".join(decoded)
 
-def compress_file(input, output):
+def compress_file(input, output): #compresses the file with input and output paths
 	with open(input, "r", encoding="utf-8") as f:
 		text = f.read()
 	dictionary = create_dictionary(text)
@@ -109,35 +97,37 @@ def compress_file(input, output):
 	bits = compress(text, codes)
 	save_compressed(bits, codes, output)
 
-def decompress_file(input, output):
+def decompress_file(input, output): #decompresses the file with input and output paths
 	bits, codes = load_compressed(input)
 	text = decompress(bits, codes)
 	with open(output, "w", encoding="utf-8") as f:
 		f.write(text)
 
-def save_compressed(bits, codes, file):
+def save_compressed(bits, codes, file): #saves the compressed file with the metadata needed for decompression
 	bytear = bytearray()
 	for i in range(0, len(bits), 8):
-		byte = bits[i:i+8]
-		bytear.append(int(byte.ljust(8, "0"), 2)) 
+		byte = bits[i:i+8] #gets 8 bits each time
+		bytear.append(int(byte.ljust(8, "0"), 2)) #adds extra 0s to the end if last byte is incomplete
 
 	metadata = {
 		"codes": codes,
 		"bit_length": len(bits)}
 
 	with open(file, "wb") as f:
-		metadata_bytes = json.dumps(metadata, separators=(",", ":")).encode("utf-8")
+		metadata_bytes = json.dumps(metadata, separators=(",", ":")).encode("utf-8") #converts metadata to json and then to bytes
 		f.write(len(metadata_bytes).to_bytes(4, "big"))
 		f.write(metadata_bytes)
 		f.write(bytear)
 
-def load_compressed(file):
+def load_compressed(file): #loads the compressed file and gets everything needed for decompression
 	with open(file, "rb") as f:
 		meta_len = int.from_bytes(f.read(4), "big")
 		metadata = json.loads(f.read(meta_len).decode("utf-8"))
 		compressed = f.read()
 
 	bit_len = len(compressed)*8
-	bits = bin(int.from_bytes(compressed, "big"))[2:].zfill(bit_len)
+	int_val = int.from_bytes(compressed, byteorder="big") #converts bytes to integer
+	bits = bin(int_val)[2:] #converts integer to bits
+	bits = bits.zfill(bit_len) #adds leading zeros back
 	bits = bits[:metadata["bit_length"]]
 	return bits, metadata["codes"]
