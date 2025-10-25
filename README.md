@@ -1,9 +1,19 @@
 # algoai
 The coursework for the course "Algoritmit ja tekoäly"
 
-
-1. The program works with poetry. If you do not already have it installed, follow the steps on https://python-poetry.org/
-2. To begin the testing, go to the correct directory cd algoai
-3. Poetry install
-4. Poetry shell
-5. To test out the algorithms, type out either python tests/huffman_test.py or python tests/lz78_test.py
+1. Clone the repository
+>git clone https://github.com/bladeefan2011/algoai.git
+2. Change to the directory
+>cd algoai
+1. Install dependencies
+>poetry install --with dev
+4. Initialize shell
+>poetry shell
+5. Run individual tests
+>pytest -v
+6. Or alternatively run the compression tests
+>python tests/huffman_test_compression.py
+>python tests/lz78_test_compression.py
+7. Check test coverage
+>coverage run -m pytest
+ coverage report -m
