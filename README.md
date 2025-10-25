@@ -13,7 +13,9 @@ The coursework for the course "Algoritmit ja tekoäly"
 >pytest -v
 6. Or alternatively run the compression tests
 >python tests/huffman_test_compression.py
+7. Or
 >python tests/lz78_test_compression.py
-7. Check test coverage
+8. Check test coverage
 >coverage run -m pytest
- coverage report -m
+9. Print the report
+>coverage report -m
