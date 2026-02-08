@@ -1,21 +1,63 @@
-# algoai
-The coursework for the course "Algoritmit ja tekoäly"
+# AlgoAI
 
-1. Clone the repository
->git clone https://github.com/bladeefan2011/algoai.git
-2. Change to the directory
->cd algoai
-1. Install dependencies
->poetry install --with dev
-4. Initialize shell
->poetry shell
-5. Run individual tests
->pytest -v
-6. Or alternatively run the compression tests
->python tests/huffman_test_compression.py
-7. Or
->python tests/lz78_test_compression.py
-8. Check test coverage
->coverage run -m pytest
-9. Print the report
->coverage report -m
+This repository contains the coursework for the course **"Algoritmit ja tekoäly"**.
+
+---
+
+## Setup Instructions
+
+Follow these steps to get the project running on your local machine.
+
+### 1. Clone the repository
+
+```bash
+git clone git@github.com:bladeefan2011/algoai.git
+```
+
+### 2. Change into the project directory
+
+```bash
+cd algoai
+```
+
+### 3. Install dependencies
+
+```bash
+poetry install --with dev
+```
+
+### 4. Activate the Poetry shell
+
+```bash
+poetry shell
+```
+
+### Running Tests
+
+### 5. Run individual tests
+
+```bash
+pytest -v
+```
+
+### 6. Run compression tests
+
+```bash
+python tests/huffman_test_compression.py
+```
+```bash
+python tests/lz78_test_compression.py
+```
+
+### Test coverage
+
+### 7. Run coverage
+
+```bash
+coverage run -m pytest
+```
+### 8. Print coverage report
+
+```bash
+coverage report -m
+```
