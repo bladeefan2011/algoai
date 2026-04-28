@@ -1,6 +1,6 @@
 # AlgoAI
 
-This repository contains the coursework for the course **"Algoritmit ja tekoäly"**.
+The project implements **LZ-78** and **Huffman coding** and compares their performance on varying datasets.
 
 ---
 
